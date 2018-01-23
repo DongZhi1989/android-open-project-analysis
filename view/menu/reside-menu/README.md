@@ -1,27 +1,27 @@
 ResideMenu 源码解析
 ====================================
-> 本文为 [Android 开源项目源码解析](https://github.com/android-cn/android-open-project-analysis) 中 ResideMenu 部分  
+> 本文为 [Android 开源项目源码解析](http://a.codekk.com) 中 ResideMenu 部分  
 > 项目地址：[ResideMenu](https://github.com/SpecialCyCi/AndroidResideMenu)，分析的版本：[70d46c2](https://github.com/SpecialCyCi/AndroidResideMenu/commit/70d46c2ed49c8123847bb07d2f0761e57bb3bc04)，Demo 地址：[ResideMenu-demo]()    
 > 分析者：[dkmeteor](https://github.com/dkmeteor)，校对者：[???]()，校对状态：未完成   
 
 
-###1. 功能介绍
+### 1. 功能介绍
 
-#####特性(Features)：
+##### 特性(Features)：
 通过手势滑动缩放主界面展现的侧边栏，类似QQ5.0+版本侧滑菜单的出现方式，支持左右双侧边栏。
 
 动效文字比较难以描述，请以演示效果Gif为例：
 
 ![demo gif](./image/residemenu-demo.gif)
 
-#####优势：
+##### 优势：
 - 性能优异，几乎没有额外的重绘和性能损耗。
 - 良好的结构设计，易于扩展和改写。
 - 与`DrawerLayout`或`SlidingMenu`相比，完全是另一种风格，第一次见到时给人眼前一亮的感觉。
 - 事件分发做了很好的处理，可以方便的与其它控件集成。
 
 
-###2. 总体设计
+### 2. 总体设计
 
 #### 2.1 View层次结构分析
 
@@ -37,12 +37,12 @@ View Tree：
 
 注意,缩放的中心点在屏幕外.
     
-###3. 事件分发流程图
+### 3. 事件分发流程图
 
 ![dispatchTouchEvent](./image/dispatchTouchEvent.png)
 
-###4. 详细设计
-###4.1 核心类功能介绍
+### 4. 详细设计
+### 4.1 核心类功能介绍
 
 ---
 ##### 4.1.1 ResideMenu
@@ -237,7 +237,7 @@ attachToActivity执行后
 
 ##### 4.1.3 TouchDisableView
 该类本身的功能非常单纯，在本项目中起一个容器的作用,通过重载`onInterceptTouchEvent`方法并返回指定值来控制是否拦截内部子`View`的`Touch`事件。
-如果读者不了解`onInterceptTouchEvent`的运作机制,可以参考 [View 事件传递](http://www.codekk.com/open-source-project-analysis/detail/Android/Trinea/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%20View%20%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92)
+如果读者不了解`onInterceptTouchEvent`的运作机制,可以参考 [View 事件传递](http://a.codekk.com/detail/Android/Trinea/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%20View%20%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92)
 
 以ResideMenu中的AnimatorListener回调为例:
 
@@ -263,7 +263,7 @@ attachToActivity执行后
 
 请结合事件分发流程图一起理解这部分.
 
-###5. 杂谈
+### 5. 杂谈
 在分析`ResideMenu`的过程中，我也尝试自己写了一个ResideMenu的效果扩展来印证分析过程中的一些结论：
 ![Folder-ResideMenu](https://raw.githubusercontent.com/dkmeteor/Folder-ResideMenu/master/screenshot.png)
 

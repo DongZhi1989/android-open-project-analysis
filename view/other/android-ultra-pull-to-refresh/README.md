@@ -1,17 +1,17 @@
 android-Ultra-Pull-To-Refresh 源码解析
 ====================================
-> 本文为 [Android 开源项目源码解析](https://github.com/android-cn/android-open-project-analysis) 中 android-Ultra-Pull-To-Refresh 部分  
+> 本文为 [Android 开源项目源码解析](http://a.codekk.com) 中 android-Ultra-Pull-To-Refresh 部分  
 > 项目地址：[android-Ultra-Pull-To-Refresh](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh)，分析的版本：[508c632](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh/tree/508c63266de51ad8c010ac9912f7592b2f2da8fc)，Demo 地址：[android-Ultra-Pull-To-Refresh Demo](https://github.com/android-cn/android-open-project-demo/tree/master/android-ultra-pull-to-refresh-demo)  
 > 分析者：[Grumoon](https://github.com/grumoon)，校对者：[lightSky](https://github.com/lightSky)，校对状态：已完成  
 
-###1. 功能介绍  
+### 1. 功能介绍  
 下拉刷新，几乎是每个 Android 应用都会需要的功能。 android-Ultra-Pull-To-Refresh （以下简称 UltraPTR ）便是一个强大的 Andriod 下拉刷新框架。  
 主要特点：  
 (1).继承于 ViewGroup， Content 可以包含任何 View。  
 (2).简洁完善的 Header 抽象，方便进行拓展，构建符合需求的头部。  
 > 对比 [Android-PullToRefresh](https://github.com/chrisbanes/Android-PullToRefresh) 项目，UltraPTR 没有实现 **加载更多** 的功能，但我认为 **下拉刷新** 和 **加载更多** 不是同一层次的功能， **下拉刷新** 有更广泛的需求，可以适用于任何页面。而 **加载更多** 的功能应该交由具体的 Content 自己去实现。这应该是和 Google 官方推出 SwipeRefreshLayout 是相同的设计思路，但对比 SwipeRefreshLayout， UltraPTR 更灵活，更容易拓展。
 
-###2. 总体设计
+### 2. 总体设计
 UltraPTR 总体设计比较简单清晰。  
 首先抽象出了两个接口，功能接口和 UI 接口。  
 PtrHandler 代表下拉刷新的功能接口，包含刷新功能回调方法以及判断是否可以下拉的方法。用户实现此接口来进行数据刷新工作。   
@@ -20,13 +20,13 @@ PtrUIHandler 代表下拉刷新的 UI 接口，包含准备下拉，下拉中，
 PtrFrameLayout 继承自 ViewGroup，有且只能有两个子 View，头部 Header 和内容 Content。通常情况下 Header 会实现 PtrUIHandler 接口， Content 可以为任意的 View。  
 和所有的自定义控件一样， PtrFrameLayout 通过重写 onFinishInflate， onMeasure， onLayout 来确定控件大小和位置。通过重写 dispatchTouchEvent 来确定控件的下拉行为。  
 
-###3. 流程图
+### 3. 流程图
 请参照 `4.1.5 PtrFrameLayout 事件拦截流程图`
 
-###4. 详细设计
-###4.1 核心类功能介绍
+### 4. 详细设计
+### 4.1 核心类功能介绍
 
-####4.1.1 PtrHandler.java
+#### 4.1.1 PtrHandler.java
 下拉刷新功能接口，对下拉刷新功能的抽象，包含以下两个方法。  
 ```java
 public void onRefreshBegin(final PtrFrameLayout frame)
@@ -41,7 +41,7 @@ public boolean checkCanDoRefresh(final PtrFrameLayout frame, final View content,
 如果 Content 是 ListView，当第一条在顶部时返回 true，表示可以下拉刷新。  
 如果 Content 是 ScrollView，当滑动到顶部时返回 true，表示可以刷新。  
 
-####4.1.2 PtrDefaultHandler.java
+#### 4.1.2 PtrDefaultHandler.java
 抽象类，实现了 PtrHandler.java 接口，给出了 `checkCanDoRefresh` 的默认实现，给出了常见 View 是否可以下拉的判断方法。  
 ```java
 @Override
@@ -187,7 +187,7 @@ UltraPTR 的核心类，自定义控件类。
   
 下面从 **显示** 和 **行为** 两个方面分析此类。  
 **（1）显示（ View 绘制）**    
-参考技术点，[公共技术点之 View 绘制流程](http://codekk.com/open-source-project-analysis/detail/Android/lightSky/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%20View%20%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B)  
+参考技术点，[公共技术点之 View 绘制流程](http://a.codekk.com/detail/Android/lightSky/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%20View%20%E7%BB%98%E5%88%B6%E6%B5%81%E7%A8%8B)  
 ```java
 @Override
 protected void onFinishInflate() {...}
@@ -237,7 +237,7 @@ final int top = paddingTop + lp.topMargin + offsetX;
 代码中有个 `offsetX` 变量（我认为改为 `offsetY` 好些），初始时为 0，随着下拉的过程， `offsetX` 会逐渐增大，这样 Header 和 Content 都会向下移动， Header 会显示出来，出现下拉的位置移动效果。 
 
 **（2）行为（ View 事件）**  
-参考技术点，[公共技术点之 View 事件传递](http://codekk.com/open-source-project-analysis/detail/Android/Trinea/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%20View%20%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92)  
+参考技术点，[公共技术点之 View 事件传递](http://a.codekk.com/detail/Android/Trinea/%E5%85%AC%E5%85%B1%E6%8A%80%E6%9C%AF%E7%82%B9%E4%B9%8B%20View%20%E4%BA%8B%E4%BB%B6%E4%BC%A0%E9%80%92)  
 ViewGroup 的事件处理，通常重写 onInterceptTouchEvent 方法或者 dispatchTouchEvent 方法，PtrFrameLayout 重写了 dispatchTouchEvent 方法。  
 **事件处理流程图** 如下：  
 ![UltraPTR-dispatchTouchEvent-flow-chart](image/UltraPTR-dispatchTouchEvent-flow-chart.png)  
